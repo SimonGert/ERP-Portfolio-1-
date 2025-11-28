@@ -1,0 +1,43 @@
+managed implementation in class ZBP_LJND_R_VAC_REQ unique;
+strict ( 2 );
+
+define behavior for ZLJND2_R_VAC_REQ alias VacationRequest
+persistent table zljnd_vac_req
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  update;
+
+
+   action Approve result [1] $self;
+    action Reject result [1] $self;
+
+  //validation ValidateStatus on save { update; }
+ // determination SetApproval on modify { update; }
+
+
+
+  field ( readonly, numbering : managed ) VacationRequestUuid;
+  field ( readonly) CreatedAt, CreatedBy, ApplicantUuid, ApproverUuid;
+field (readonly) LastChangedBy, LastChangedAt;
+field (readonly) StartDate, EndDate, VacationDays, Details;
+
+
+  mapping for zljnd_vac_req corresponding
+    {
+      VacationRequestUuid = vacation_request_uuid;
+      ApplicantUuid       = applicant_uuid;
+      ApproverUuid        = approver_uuid;
+      StartDate           = start_date;
+      EndDate             = end_date;
+      VacationDays        = vacation_days;
+      Details             = details;
+      Status              = status;
+      /* Administrative Data */
+      CreatedBy           = created_by;
+      CreatedAt           = created_at;
+      LastChangedBy       = last_changed_by;
+      LastChangedAt       = last_changed_at;
+    }
+}
